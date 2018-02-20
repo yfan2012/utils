@@ -1,0 +1,21 @@
+#!/bin/bash -l
+
+##cat index and make last one
+
+#SBATCH --account=mschatz1
+#SBATCH --time=00:30:0
+#SBATCH --partition=shared
+
+
+##set up prefix
+prefix=`echo $1 | rev | cut -d / -f 1 | rev`
+if [ -z $prefix ] ; then
+    prefix=`echo $1 | rev | cut -d / -f 2 | rev`
+fi
+
+
+~/software/timp_nanopolish/nanopolish index -d $1/called $1/fastqs/$prefix.fq
+~/software/timp_nanopolish/nanopolish index -d $1/called $1/fastqs/$prefix.fail.fq
+
+cat $1/np_index/*readdb > $1/fastqs/$prefix.fq.index.readdb
+cp $1/fastqs/$prefix.fq.index.readdb $1/fastqs/$prefix.fail.fq.index.readdb

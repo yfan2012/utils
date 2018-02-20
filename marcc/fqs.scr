@@ -1,0 +1,22 @@
+#!/bin/bash -l
+
+#SBATCH --account=mschatz1
+#SBATCH --time=1:30:0
+#SBATCH --partition=shared
+
+
+
+##set up prefix
+prefix=`echo $1 | rev | cut -d / -f 1 | rev`
+if [ -z $prefix ] ; then
+    prefix=`echo $1 | rev | cut -d / -f 2 | rev`
+fi
+
+
+##gather fastqs after calling
+cat $1/called/*/workspace/pass/*fastq > $1/fastqs/$prefix.fq &
+cat $1/called/*/workspace/fail/*fastq > $1/fastqs/$prefix.fail.fq
+
+
+cat $1/fastqs/$prefix.fq $1/fastqs/$prefix.fail.fq > $1/fastqs/$prefix.all.fq
+

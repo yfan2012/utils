@@ -1,0 +1,30 @@
+#!/bin/bash -l
+
+#SBATCH --account=mschatz1
+#SBATCH --time=48:00:00
+#SBATCH --partition=shared
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=24
+#SBATCH --ntasks-per-node=1
+
+srcdir=~/software/timp_nanopolish
+datadir=$1
+enzyme=$2
+ref=$3
+
+samp=`echo $datadir | rev | cut -d / -f 1 | rev`
+refpre=`echo $ref | cut -d . -f 1`
+
+##train
+echo TRAINING
+
+cd $datadir/models
+$srcdir/nanopolish methyltrain -v -t 72 \
+		   --train-kmers all \
+		   --out-fofn $datadir/models/$samp.$enzyme.fofn \
+		   --out-suffix $enzyme.model \
+		   -m $datadir/models/input_models.fofn \
+		   --reads $datadir/fastqs/$samp.fq \
+		   --bam $datadir/bams/$samp.sorted.bam \
+		   --genome $refpre.$enzyme.fasta 
+

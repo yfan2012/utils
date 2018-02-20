@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+#SBATCH --account=mschatz1
+#SBATCH --time=0:30:0
+#SBATCH --partition=shared
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=22
+#SBATCH --cpus-per-task=1
+
+i=$SLURM_ARRAY_TASK_ID
+
+ml samtools
+ml gcc/5.1.0
+
+cat $1/called/$i/workspace/pass/*fastq > $1/np_index/$i.fq
+~/software/timp_nanopolish/nanopolish index -t db -d $1/called/$i $1/np_index/$i.fq
+
+cat $1/called/$i/workspace/fail/*fastq > $1/np_index/$i.fail.fq
+~/software/timp_nanopolish/nanopolish index -t db -d $1/called/$i $1/np_index/$i.fail.fq
