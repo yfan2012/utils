@@ -22,3 +22,4 @@ if [ -f $1/fastqs/$prefix.fq ] ; then
 fi
 
 samtools index $1/bams/$prefix.sorted.bam
+touch $1/bams/align_done.txt

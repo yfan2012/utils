@@ -1,0 +1,11 @@
+#!/bin/bash -l
+
+#SBATCH --account=mschatz1
+#SBATCH --time=10:30:0
+#SBATCH --partition=shared
+
+
+
+##set up prefix
+rm -r $1
+

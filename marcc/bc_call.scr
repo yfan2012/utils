@@ -15,7 +15,7 @@ else
 
     echo "calling ${i}"
     read_fast5_basecaller.py -v
-    read_fast5_basecaller.py -i $1/raw/${i}/ -t 22 -s $1/called/${i}/ --flowcell FLO-MIN106 --kit SQK-LSK108 -o fastq
+    read_fast5_basecaller.py -i $1/raw/${i}/ -t 22 -s $1/called/${i}/ --flowcell FLO-MIN106 --kit SQK-LSK108 -o fastq --barcoding
     touch $1/call_done/$i.txt
 fi
 

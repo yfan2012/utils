@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --account=mschatz1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=10:00:00
+
+
+
+ml python/3.4.2
+
+tarball=$1
+if [ -d $2 ] ; then
+    python3 ~/Code/timp_nanopore/aws/tar4kbin.py -i $1 --outdir $2/raw
+    touch $2/untar_done.txt
+else
+    python3 ~/Code/timp_nanopore/aws/tar4kbin.py -i $1 -s $2 --outdir $3/raw
+    touch $3/untar_done.txt
+fi
+
+
+
+
