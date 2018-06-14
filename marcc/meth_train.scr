@@ -19,7 +19,7 @@ refpre=`echo $ref | cut -d . -f 1`
 echo TRAINING
 
 cd $datadir/models
-$srcdir/nanopolish methyltrain -v -t 72 \
+$srcdir/nanopolish methyltrain -v -t 36 \
 		   --train-kmers all \
 		   --out-fofn $datadir/models/$samp.$enzyme.fofn \
 		   --out-suffix $enzyme.model \

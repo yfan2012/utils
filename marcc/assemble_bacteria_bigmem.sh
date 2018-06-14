@@ -1,5 +1,5 @@
 #!/bin/bash
-
+##for bigmem
 prefix=` basename $1 .fq `
 echo $prefix
 
@@ -52,7 +52,7 @@ fi
 if [ -f $1 ] ; then
     canu \
 	-p $prefix -d $2 \
-	-gridOptions="--time=22:00:00 --account=mschatz1" \
+	-useGrid=false \
 	genomeSize=$gsize \
 	-nanopore-raw $1
 fi

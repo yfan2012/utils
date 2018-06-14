@@ -22,8 +22,10 @@ do
 done
 
 
+if [ ! -f $1/fastqs/$prefix.fa ] ;
+   seqtk seq -a $1/fastqs/$prefix.fq > $1/fastqs/$prefix.fa
+fi
 
-seqtk seq -a $1/fastqs/$prefix.fq > $1/fastqs/$prefix.fa
 nanopolish index -d $1/raw -f $1/polish/workspace.fofn $1/fastqs/$prefix.fa
 
 

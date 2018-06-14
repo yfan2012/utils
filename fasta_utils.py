@@ -38,3 +38,23 @@ def count_bases(fastapath):
             bases+=len(i.strip('\n'))
 
     return bases
+
+
+
+
+def main(fastapath):
+    '''get rid of all duplicate read names in a fasta file'''
+    namedict=fasta_dict(fastapath)
+    with open(fastapath, 'w') as f:
+        for i in namedict:
+            f.write(i+'\n')
+            f.write(namedict[i]+'\n')
+
+
+if __name__ == '__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description = 'make sure there are no duplicate read names')
+    parser.add_argument('--infasta', '-i', type=str, required=True,  help='input fasta file')
+    args=parser.parse_args()
+    
+    main(args.infasta)
