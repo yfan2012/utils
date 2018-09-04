@@ -27,7 +27,7 @@ mkdir -p $1/mpolish/seqs
 ##nanopolish index -d $1/raw -f $1/polish_meth/workspace.fofn $1/fastqs/$prefix.fa
 
 
-ml python/2.7.10
+ml python/2.7
 python ~/software/nanopolish/scripts/nanopolish_makerange.py $1/canu_assembly/$prefix.contigs.fasta | \
     parallel --results ~/data/yfan/nanopolish.results -P 8 \
 	     nanopolish variants \

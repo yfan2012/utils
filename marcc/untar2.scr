@@ -6,7 +6,7 @@
 
 
 ##4k the raw
-ml python/3.4.2
+##ml python/3.4.2
 python3 ~/Code/timp_nanopore/aws/tar4kbin.py -i $1 -s $2 --outdir $3/raw
 
 

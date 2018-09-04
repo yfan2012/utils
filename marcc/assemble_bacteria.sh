@@ -43,6 +43,13 @@ elif [[ $prefix == *"AXYE"* ]]; then
 elif [[ $prefix == *"BOAV"* ]]; then
     ##bordetella avium
     gsize=3.8m
+elif [[ $prefix == *"PRRE"* ]]; then
+    ##Providencia rettgeri 
+    gsize=4.8m
+elif [[ $prefix == *"CAAU"* ]]; then
+    ##candida auris
+    gsize=12.5m
+
 else 
     echo 'Cant figure out what the org is. Pls name ur fastq better. #datahygiene'
 fi
@@ -52,7 +59,7 @@ fi
 if [ -f $1 ] ; then
     canu \
 	-p $prefix -d $2 \
-	-gridOptions="--time=22:00:00 --account=mschatz1" \
+	-gridOptions="--mem-per-cpu=5g --partition=shared --time=22:00:00 --account=mschatz1" \
 	genomeSize=$gsize \
 	-nanopore-raw $1
 fi

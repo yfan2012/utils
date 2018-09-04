@@ -10,7 +10,7 @@ npscript=~/Code/methylation-analysis
 datadir=/scratch/groups/mschatz1/cpowgs
 ref=$datadir/methref/ecoli_er2796.fasta
 
-ml python/2.7.10
+ml python/2.7
 ml gcc/5.1.0
 
 for enzyme in dam sin395 pspjdri fnu4h sdeaII hinfI ;
