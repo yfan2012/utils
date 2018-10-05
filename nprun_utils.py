@@ -39,7 +39,17 @@ def check_unique(indir):
     
     return [fq_reads, ssunique, ssnum]
 
+'''
+def runstats(infq):
 
+    with open(infq) as f:
+        content=f.readlines()
+    
+    seqs=content[2::]
+''' 
+    
+
+    
 
 def main(indir):
     counts=check_unique(indir)

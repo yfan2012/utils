@@ -51,6 +51,8 @@ def main(fastapath):
             f.write(namedict[i]+'\n')
 
 
+
+            
 if __name__ == '__main__':
     import argparse
     parser=argparse.ArgumentParser(description = 'make sure there are no duplicate read names')
