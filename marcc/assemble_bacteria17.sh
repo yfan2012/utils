@@ -19,6 +19,9 @@ elif [[ $prefix == *"AB"* ]] ; then
 elif [[ $prefix == *"colacae"* ]]; then
     ##E. cloacae
     gsize=5.3m
+elif [[ $prefix == *"ENCL"* ]]; then
+    ##E. cloacae
+    gsize=5.3m
 elif [[ $prefix == *"Citrobacter"* ]]; then
     gsize=5.2m
 elif [[ $prefix == *"Pantoea"* ]]; then

@@ -12,14 +12,14 @@ if [ -z $prefix ] ; then
     prefix=`echo $1 | rev | cut -d / -f 2 | rev`
 fi
 
-ml samtools/1.3
+ml samtools
 
 rm -r $1/bams
 mkdir -p $1/bams
 
 if [ -f $1/fastqs/$prefix.fq ] ; then
-    minimap2 -a -x map-ont -t 22 $2 $1/fastqs/$prefix.fq | samtools view -b | samtools sort -o $1/bams/$prefix.sorted.bam -T $1/bams/reads.tmp -
+    minimap2 -a -x map-ont -t 22 $2 $1/fastqs/$prefix.fq | samtools view -b | samtools sort -o $1/bams17/$prefix.sorted.bam -T $1/bams17/reads.tmp -
 fi
 
-samtools index $1/bams/$prefix.sorted.bam
-touch $1/bams/align_done.txt
+samtools index $1/bams17/$prefix.sorted.bam
+touch $1/bams17/align_done.txt

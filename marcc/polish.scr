@@ -12,10 +12,10 @@ if [ -z $prefix ] ; then
     prefix=`echo $1 | rev | cut -d / -f 2 | rev`
 fi
 
-mkdir -p $1/polish
-mkdir -p $1/polish/seqs
-rm $1/polish/workspace.fofn
-touch $1/polish/workspace.fofn
+mkdir -p $1/polish17
+mkdir -p $1/polish17/vcf
+rm $1/polish17/workspace.fofn
+touch $1/polish17/workspace.fofn
 
 
 if [ ! -f $1/fastqs/$prefix.fa ] ; then
@@ -27,30 +27,31 @@ if [ -d "$2" ] ; then
     echo RUNDIR
     for i in $2/called/*/sequencing_summary.txt ;
     do
-	echo $i >> $1/polish/workspace.fofn
+	echo $i >> $1/polish17/workspace.fofn
     done
     python ~/Code/utils/fasta_utils.py -i $1/fastqs/$prefix.fa
-    nanopolish index -d $2/raw -f $1/polish/workspace.fofn $1/fastqs/$prefix.fa
+    nanopolish index -d $2/raw -f $1/polish17/workspace.fofn $1/fastqs/$prefix.fa
 else
     echo SINGLE
     for i in $1/called/*/sequencing_summary.txt ;
     do
-	echo $i >> $1/polish/workspace.fofn
+	echo $i >> $1/polish17/workspace.fofn
     done
     python ~/Code/utils/fasta_utils.py -i $1/fastqs/$prefix.fa
-    nanopolish index -d $1/raw -f $1/polish/workspace.fofn $1/fastqs/$prefix.fa
+    nanopolish index -d $1/raw -f $1/polish17/workspace.fofn $1/fastqs/$prefix.fa
 fi
 
 
 ml python/2.7
-python ~/software/nanopolish/scripts/nanopolish_makerange.py $1/canu_assembly/$prefix.contigs.fasta | \
+python ~/software/nanopolish/scripts/nanopolish_makerange.py $1/canu17/$prefix.contigs.fasta | \
     parallel --results nanopolish.results -P 8 \
-	     nanopolish variants \
-	     --consensus $1/polish/seqs/$prefix.polished.{1}.fa -w {1} \
-	     -r $1/fastqs/$prefix.fa -b $1/bams/$prefix.sorted.bam \
-	     -g $1/canu_assembly/$prefix.contigs.fasta \
+	     nanopolish variants --consensus \
+	     -o $1/polish17/seqs/$prefix.polished.{1}.vcf -w {1} \
+	     -r $1/fastqs/$prefix.fa \
+	     -b $1/bams17/$prefix.sorted.bam \
+	     -g $1/canu17/$prefix.contigs.fasta \
 	     -t 4 \
 	     --min-candidate-frequency 0.1
 
-python ~/software/nanopolish/scripts/nanopolish_merge.py $1/polish/seqs/$prefix.polished*.fa > $1/polish/$prefix.polished.fasta
+nanopolish vcf2fasta -g $1/canu17/$prefix.contigs.fasta $1/polish1/seqs/$prefix.polished*.vcf > $1/polish17/$prefix.polished.fasta
 

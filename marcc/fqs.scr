@@ -17,7 +17,8 @@ fi
 cat $1/called/*/workspace/pass/*fastq > $1/fastqs/$prefix.fq
 cat $1/called/*/workspace/fail/*fastq > $1/fastqs/$prefix.fail.fq
 
-
 cat $1/fastqs/$prefix.fq $1/fastqs/$prefix.fail.fq > $1/fastqs/$prefix.all.fq
+
+
 
 touch $1/fastqs/fq_done.txt
