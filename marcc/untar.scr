@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #SBATCH --account=mschatz1
-#SBATCH --cpus-per-task=1
-#SBATCH --time=10:00:00
-
+#SBATCH --time=30:00:00
+#SBATCH --ntasks-per-node=1 
 
 ##4k the raw
 ##ml python/3.4.2

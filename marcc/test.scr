@@ -25,18 +25,18 @@ if [ -d "$2" ] ; then
     echo RUNDIR
     for i in $2/called/*/sequencing_summary.txt ;
     do
-	echo $i >> $1/polish/workspace.fofn
+	echo $i >> $1/polish17/workspace.fofn
     done
     python ~/Code/utils/fasta_utils.py -i $1/fastqs/$prefix.fa
-    nanopolish index -d $2/raw -f $1/polish/workspace.fofn $1/fastqs/$prefix.fa
+    nanopolish index -d $2/raw -f $1/polish17/workspace.fofn $1/fastqs/$prefix.fa
 else
     echo SINGLE
     for i in $1/called/*/sequencing_summary.txt ;
     do
-	echo $i >> $1/polish/workspace.fofn
+	echo $i >> $1/polish17/workspace.fofn
     done
     python ~/Code/utils/fasta_utils.py -i $1/fastqs/$prefix.fa
-    nanopolish index -d $1/raw -f $1/polish/workspace.fofn $1/fastqs/$prefix.fa
+    nanopolish index -d $1/raw -f $1/polish17/workspace.fofn $1/fastqs/$prefix.fa
 fi
 
 
@@ -51,5 +51,5 @@ python ~/software/nanopolish/scripts/nanopolish_makerange.py $1/canu_assembly/$p
 	     -t 4 \
 	     --min-candidate-frequency 0.1
 
-nanopolish vcf2fasta -g $1/canu_assembly/$prefix.contigs.fasta $1/polish/vcf/$prefix.polished*.vcf > $1/polish/$prefix.polished.fasta
+nanopolish vcf2fasta -g $1/canu/$prefix.contigs.fasta $1/polish/vcf/$prefix.polished*.vcf > $1/polish/$prefix.polished.fasta
 

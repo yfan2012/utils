@@ -9,14 +9,13 @@
 
 i=$SLURM_ARRAY_TASK_ID
 
-if [ -d "$1/called/${i}/workspace/pass" ]; then 
+if [ -d "$1/called/${i}/" ]; then 
     echo "Already called this one: ${i}"
-    touch $1/call_done/$i.txt
 else
 
     echo "calling ${i}"
     read_fast5_basecaller.py -v
-    read_fast5_basecaller.py -i $1/raw/${i}/ -t 22 -s $1/called/${i}/ --flowcell FLO-MIN106 --kit SQK-LSK108 -o fastq --barcoding
+    read_fast5_basecaller.py -i $1/raw/${i}/ -t 22 -s $1/called/${i}/ --flowcell FLO-MIN106 --kit SQK-LSK109 -o fastq
     touch $1/call_done/$i.txt
 fi
 

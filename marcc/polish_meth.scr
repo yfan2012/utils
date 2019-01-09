@@ -12,8 +12,8 @@ if [ -z $prefix ] ; then
     prefix=`echo $1 | rev | cut -d / -f 2 | rev`
 fi
 
-mkdir -p $1/mpolish17
-mkdir -p $1/mpolish17/vcf
+mkdir -p $1/mpolish
+mkdir -p $1/mpolish/vcf
 ##touch $1/polish_meth/workspace.fofn
 
 ##for i in $1/called/*/sequencing_summary.txt ;
@@ -28,15 +28,15 @@ mkdir -p $1/mpolish17/vcf
 
 
 ml python/2.7
-python ~/software/nanopolish/scripts/nanopolish_makerange.py $1/canu17/$prefix.contigs.fasta | \
+python ~/software/nanopolish/scripts/nanopolish_makerange.py $1/canu_assembly/$prefix.contigs.fasta | \
     parallel --results ~/data/yfan/nanopolish.results -P 8 \
 	     nanopolish variants --consensus \
-	     -o $1/mpolish17/vcf/$prefix.polished_meth.{1}.vcf -w {1} \
+	     -o $1/mpolish/vcf/$prefix.polished_meth.{1}.vcf -w {1} \
 	     -r $1/fastqs/$prefix.fa \
-	     -b $1/bams17/$prefix.sorted.bam \
-	     -g $1/canu17/$prefix.contigs.fasta \
+	     -b $1/bams/$prefix.sorted.bam \
+	     -g $1/canu_assembly/$prefix.contigs.fasta \
 	     -t 4 \
 	     --methylation-aware=dcm,dam \
 	     --min-candidate-frequency 0.1
 													       
-nanopolish vcf2fasta -g $1/canu17/$prefix.contigs.fasta $1/mpolish17/vcf/$prefix.polished_meth*.vcf > $1/mpolish17/$prefix.polished_meth.fasta
+nanopolish vcf2fasta -g $1/canu_assembly/$prefix.contigs.fasta $1/mpolish/vcf/$prefix.polished_meth*.vcf > $1/mpolish/$prefix.polished_meth.fasta
