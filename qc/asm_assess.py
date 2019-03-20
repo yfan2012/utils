@@ -18,7 +18,7 @@ def n50(asmpath):
         if bases>target:
             break
 
-    return [len(lens), lens[nfifty-1], lens[0], lens[-1]]
+    return [len(lens), lens[nfifty-1], lens[0], lens[-1], sum(lens)]
 
 
 def main(asmpath):
