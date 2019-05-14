@@ -73,4 +73,3 @@ if __name__ == '__main__':
     parser.add_argument('--outfile', '-o', type=str, required=True,  help='output path')
     args=parser.parse_args()
     main(args.inpaf, args.snps, args.ref, args.mersize, args.outfile)
-
