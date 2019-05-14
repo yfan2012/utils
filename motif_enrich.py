@@ -22,6 +22,7 @@ def mumseqs(snps, ref):
         seqs.append(refseqs['>'+chrom][pos-3:pos+3])
     return seqs
 
+
 def freqmotif (seqs, mersize):
     '''count number of occurences of each kmer'''
     import itertools
