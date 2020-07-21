@@ -10,16 +10,20 @@ def pafseqs(pafreport):
 
 def mumseqs(snps, ref):
     import sys
-    sys.path.insert(0, '/home-4/yfan7@jhu.edu/Code/utils')
+    sys.path.insert(0, '/home/yfan/Code/utils')
     from fasta_utils import fasta_dict
-    refseqs=fasta_dict(ref)
+    rawrefseqs=fasta_dict(ref)
+    refseqs={}
+    for i in rawrefseqs:
+        newname=i.split(' ')[0]
+        refseqs[newname]=rawrefseqs[i]
     with open(snps, 'r') as f:
         content=f.read().splitlines()
     seqs=[]
     for i in content:
         pos=int(i.split('\t')[0])
         chrom=i.split('\t')[10]
-        seqs.append(refseqs['>'+chrom][pos-3:pos+3])
+        seqs.append(refseqs['>'+chrom][pos-6:pos+5])
     return seqs
 
 
