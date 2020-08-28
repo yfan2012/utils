@@ -40,7 +40,7 @@ def assign_snps(snpsfile):
 def main(snpsfile, outfile):
     snpinfo=assign_snps(snpsfile)
     with open(outfile, 'w') as f:
-        f.write('chrm,pos,ref,alt,ro,ao,annotation,impact,genename,feature_type,prot_change,info')
+        f.write('chrm,pos,ref,alt,ro,ao,annotation,impact,genename,feature_type,prot_change,info'+'\n')
         for i in snpinfo:
             f.write(','.join(i)+'\n')
         f.close()
