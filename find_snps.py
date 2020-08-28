@@ -28,7 +28,7 @@ def find_snps(vcffile):
 def prep_gff(gfffile):
     '''
     input gff
-    return list: [chrname, start, end, genename, product, note]
+    return list of lists: [chrname, start, end, genename, product, note]
     '''
     with open(gfffile) as f:
         content=f.read().split('\n')
@@ -38,13 +38,19 @@ def prep_gff(gfffile):
         if len(i)>0:
             if i[0]!='#':
                 info=i.split('\t')
-                if info[3]!='region' and info[3]!='gene':
+                ##don't care about the 'region' feature type
+                if info[2]!='region':
                     tags=info[8].split(';')
                     prodinfo=[x for x in tags if 'product=' in x]
+                    if len(prodinfo)==0:
+                        prodinfo=['none']
                     geneinfo=[x for x in tags if 'gene=' in x]
+                    if len(geneinfo)==0:
+                        geneinfo=['none']
                     noteinfo=[x for x in tags if 'Note=' in x]
-                    if len(prodinfo)>0 and len(geneinfo)>0 and len(noteinfo)>0:
-                        genes.append([info[0], info[3], info[4], ','.join(geneinfo), ','.join(prodinfo), ','.join(noteinfo)])
+                    if len(noteinfo)==0:
+                        noteinfo=['none']
+                    genes.append([info[0], info[3], info[4], info[1], ','.join(geneinfo), ','.join(prodinfo), ','.join(noteinfo)])
     return(genes)
 
 
