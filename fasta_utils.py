@@ -3,7 +3,6 @@ def fasta_dict(fastapath):
     fasta={}
     with open(fastapath, 'r') as f:
         content=f.readlines()
-
     name=''
     seq=''
     for i in content:
@@ -15,7 +14,6 @@ def fasta_dict(fastapath):
         else:
             seq+=i.strip('\n')
     fasta[name]=seq
-
     return(fasta)
 
 

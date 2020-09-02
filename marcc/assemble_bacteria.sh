@@ -1,5 +1,8 @@
 #!/bin/bash
 
+##first input is fastq file of raw nanopore reads ending in .fq
+##second input is dir for assembly output
+
 prefix=` basename $1 .fq `
 echo $prefix
 
@@ -64,7 +67,6 @@ elif [[ $prefix == *"CIFR"* ]]; then
 elif [[ $prefix == *"CAAU"* ]]; then
     ##candida auris
     gsize=12.5m
-
 else 
     echo 'Cant figure out what the org is. Pls name ur fastq better. #datahygiene'
 fi

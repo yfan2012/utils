@@ -12,16 +12,25 @@ def tig_to_pos(mumsnps):
     return posdict
 
 def collapse(poslist):
-    '''scan through a list of positions and delete runs of consecutive numbers. 
-    It should be rare that there are more than a few in a row, so you should just scan for ranges of three when doing the venn diagram.
-    Think of a more precise way to do this later'''
+    '''Scan through list of positions and return list of ranges'''
+    ##add pseudo location to the end so the while loop works easily
+    ##if poslist[-1]-poslist[-2] == 1:
+    poslist.append(999999999999999)
     diffs=[j-i for i,j in zip(poslist[:-1],poslist[1:])]
-    poscon=[ i for i, x in enumerate(diffs) if x == 1][::-1]
-    for i in poscon:
-        del poslist[i]
-    return poslist
-                
-                
+    ranges=[]
+    i=0
+    start=poslist[0]
+    while i < len(diffs):
+        if diffs[i] > 3:
+            end=poslist[i]
+            ranges.append([start-3, end+3])
+            start=poslist[i+1]
+            i+=1
+        else:
+            i+=1
+    return ranges
+
+
 def venn(posdict1, posdict2):
     '''given two dictionaries of tigs and positions, return a list [tig, both, r1, r2]'''
     ##scan through positions and collapse anything that's less than two bases away
@@ -30,22 +39,29 @@ def venn(posdict1, posdict2):
         if tig in posdict2:
             collapsed1=collapse(posdict1[tig])
             collapsed2=collapse(posdict2[tig])
+        bothlist=[]    
         both=0
         unique1=0
         for i in collapsed1:
-            delt=[ abs(i - x) for x in collapsed2 ]
-            if any( d < 2 for d in delt):
+            overlap=[ i[0] <= j[1] and i[1] >= j[0] for j in collapsed2 ]
+            if sum(overlap)>=1:
                 both+=1
             else:
                 unique1+=1
         unique2=0
         both2=0
         for i in collapsed2:
-            delt=[ abs(i - x) for x in collapsed1 ]
-            if any( d < 2 for d in delt):
+            overlap=[ i[0] <= j[1] and i[1] >= j[0] for j in collapsed1 ]
+            if sum(overlap)>=1:
                 both2+=1
             else:
                 unique2+=1
+        ##if two distinct regions in one map to the same region in the other, the intersection of the venn diagram can e different
+        ##force them to be the smaller - this essentially combines the two distinct regions
+        if both > both2:
+            both=both2
+        else:
+            both2=both
         vencounts.append([tig, str(both), str(both2), str(unique1), str(unique2)])
     return vencounts
 
@@ -60,7 +76,7 @@ def main(mumfile1, mumfile2, outfile):
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.ArgumentParser(description='get info about which mummer snps are common between two queries aligned to the same ref')
+    parser = argparse.ArgumentParser(description='take mummer snp file and make csv that lists number of snps that are common, unique to samp1, and unique to samp2 for each tig')
     parser.add_argument('--mumfile1', '-m1', help='first mummer snp file', type=str)
     parser.add_argument('--mumfile2', '-m2', help='second mummer snp file', type=str)
     parser.add_argument('--outfile', '-o', help='output csv path', type=str)

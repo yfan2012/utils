@@ -12,8 +12,25 @@ def rm_short(fqfile, outfile, least):
         g.close()
     f.close()
 
+
+def rm_short_fa(fqfile, outfile, least):
+    import sys
+    sys.path.insert(0, '/home/yfan/Code/utils')
+    from fasta_utils import fasta_dict
+    fa=fasta_dict(fqfile)
+    with open(outfile, 'w') as f:
+        for i in fa:
+            if len(fa[i]) > least:
+                f.write(i+'\n')
+                f.write(fa[i]+'\n')
+                
+
+    
 def main(fqfile, outfile, least):
-    rm_short(fqfile, outfile, least)
+    if fqfile.endswith(('.fa', '.fasta')):
+        rm_short_fa(fqfile, outfile, least)
+    else:
+        rm_short(fqfile, outfile, least)
 
 if __name__=='__main__':
     import argparse
