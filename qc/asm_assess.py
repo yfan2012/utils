@@ -1,6 +1,6 @@
 def n50(asmpath):
     import sys
-    sys.path.insert(0, '/home-4/yfan7@jhu.edu/Code/utils')
+    sys.path.insert(0, '/home/yfan/Code/utils')
     from fasta_utils import fasta_dict
 
     asm=fasta_dict(asmpath)
