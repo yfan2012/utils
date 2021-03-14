@@ -1,14 +1,26 @@
 def rm_short(fqfile, outfile, least):
     from itertools import islice
-    with open(fqfile) as f:
-        with open(outfile, 'w') as g:
-            while True:
-                next_read=list(islice(f, 4))
-                if not next_read:
-                    break
-                if len(next_read[1]) > least:
-                    for i in next_read:
-                        g.write(i)
+    import gzip
+    if fqfile.endswith('.gz'):
+        with gzip.open(fqfile) as f:
+            with gzip.open(outfile, 'w') as g:
+                while True:
+                    next_read=list(islice(f, 4))
+                    if not next_read:
+                        break
+                    if len(next_read[1]) > least:
+                        for i in next_read:
+                            g.write(i)
+    else:
+        with open(fqfile) as f:
+            with open(outfile, 'w') as g:
+                while True:
+                    next_read=list(islice(f, 4))
+                    if not next_read:
+                        break
+                    if len(next_read[1]) > least:
+                        for i in next_read:
+                            g.write(i)
         g.close()
     f.close()
 
