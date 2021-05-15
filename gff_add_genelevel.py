@@ -101,10 +101,68 @@ def writegenes(tooldict):
     return(final)
     
 
-    
+def addtranscripts(toolfinal):
+    '''
+    take list of lists
+    get dict of transcript info in transcript info
+    '''
+    transdict={}
+    genedict={}
+    for i in toolfinal:
+        if i[2]!='gene':
+            parent=i[8].split(';')[1].split('=')[1]
+            gene=parent.split('.')[0]
+            if parent in transdict:
+                transdict[parent].append(i)
+            else:
+                transdict[parent]=[i]
+            if gene in genedict:
+                genedict[gene].append(parent)
+            else:
+                genedict[gene]=[parent]
+    transinfo={}
+    for i in genedict:
+        uniquescripts=list(set(genedict[i]))
+        for j in uniquescripts:
+            tigs=[]
+            strands=[]
+            info=[]
+            starts=[]
+            ends=[]
+            info=[]
+            tool=transdict[j][0][1]
+            for k in transdict[j]:
+                tigs.append(k[0])
+                strands.append(k[6])
+                starts.append(int(k[3]))
+                ends.append(int(k[4]))
+                info.append(k)
+            if len(set(tigs))==1 and len(set(strands))==1:
+                start=min(starts)
+                end=max(ends)
+                transinfo[j]=[tigs[0], tool, 'transcript', str(start), str(end), '.' , strands[0], '.', 'ID='+j]
+    newfinal=[]
+    for i in toolfinal:
+        if i[2]=='gene':
+            newfinal.append(i)
+            gene=i[8].split('=')[1]
+            transcriptlist=list(set(genedict[gene]))
+            for j in transcriptlist:
+                newfinal.append(transinfo[j])
+                newfinal.extend(transdict[j])
+    return(newfinal)
+                
+
+def uniqueid(liftgenes):
+    '''
+    make sure all ids are unique
+    '''
+
+
 def main(infile, outfile):
-    ##manually dealing with this for now
-    types=['AUGUSTUS', 'Liftoff', 'GeneMark.hmm', 'StringTie']
+    '''
+    run stuff
+    '''
     with open(infile, 'r') as f:
         content=f.read().split('\n')
         augustus=[]
@@ -121,22 +179,34 @@ def main(infile, outfile):
                     augustus.append(featinfo)
                 elif featinfo[1]=='StringTie':
                     stringtie.append(featinfo)
-                    
+
     augdict=augustus_addgenes(augustus)
     liftdict=liftoff_addgenes(liftoff)
     liftgenes=liftoff_findgenes(liftoff)
     stringdict=stringtie_addgenes(stringtie)
 
-    augfinal=writegenes(augdict)
+    augwrite=writegenes(augdict)
     stringfinal=writegenes(stringdict)
-    
+
+    augtrans=addtranscripts(augwrite)
+
+    liftlist=[]
     with open(outfile, 'w') as f:
         ##loop through liftoff first
         for gene in liftgenes:
-            f.write('\t'.join(liftgenes[gene])+'\n')
+            gid=liftgenes[gene][8].split(';')
+            numdups=1
+            ##check if gid is already used
+            if gid not in liftlist:
+                liftlist.append(gid)
+                f.write('\t'.join(liftgenes[gene])+'\n')
+            else:
+                newid=gid+'_'+str(numdups)
+                liftlist.append(newid)
+                f.write('\t'.join(liftgenes[gene][8].replace(gid, newgid)))
             for i in liftdict[gene]:
                 f.write('\t'.join(i)+'\n')
-        for i in augfinal:
+        for i in augtrans:
             f.write('\t'.join(i)+'\n')
         for i in stringfinal:
             f.write('\t'.join(i)+'\n')
