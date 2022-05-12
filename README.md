@@ -1,2 +1,2 @@
 # utils
-scripts for things I often do for every project
+scripts for things I might do often for multiple projects
